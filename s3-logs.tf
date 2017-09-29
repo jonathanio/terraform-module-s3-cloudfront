@@ -23,32 +23,3 @@ resource "aws_s3_bucket" "logs" {
 
   tags = "${merge(var.tags, map("Name", format("s3-cloudfront-%s-logs", var.name)))}"
 }
-
-resource "aws_s3_bucket_policy" "logs" {
-  bucket = "${aws_s3_bucket.logs.id}"
-  policy = "${data.aws_iam_policy_document.s3_bucket_logging.json}"
-}
-
-data "aws_iam_policy_document" "s3_bucket_logging" {
-  statement {
-    sid    = "AllowCurrentUserFullAccess"
-    effect = "Allow"
-
-    principals {
-      type = "AWS"
-
-      identifiers = [
-        "${data.aws_caller_identity.current.arn}",
-      ]
-    }
-
-    actions = [
-      "s3:*",
-    ]
-
-    resources = [
-      "${aws_s3_bucket.logs.arn}",
-      "${aws_s3_bucket.logs.arn}/*",
-    ]
-  }
-}
