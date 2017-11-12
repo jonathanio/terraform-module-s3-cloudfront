@@ -67,26 +67,4 @@ data "aws_iam_policy_document" "s3_bucket_content" {
       identifiers = ["${aws_cloudfront_origin_access_identity.website.iam_arn}"]
     }
   }
-
-  statement {
-    sid    = "AllowCurrentUserFullAccess"
-    effect = "Allow"
-
-    principals = {
-      type = "AWS"
-
-      identifiers = [
-        "${data.aws_caller_identity.current.arn}",
-      ]
-    }
-
-    actions = [
-      "s3:*",
-    ]
-
-    resources = [
-      "${aws_s3_bucket.content.arn}",
-      "${aws_s3_bucket.content.arn}/*",
-    ]
-  }
 }
