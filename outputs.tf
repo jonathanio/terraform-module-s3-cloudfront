@@ -8,6 +8,11 @@ output "s3_bucket_name" {
   value       = "${aws_s3_bucket.content.id}"
 }
 
+output "s3_logging_name" {
+  description = "The name of the S3 logging bucket that access logs will be saved to."
+  value       = "${aws_s3_bucket.logs.id}"
+}
+
 output "cloudfront_distribution_id" {
   description = "The ID of the CloudFront Distribution."
   value       = "${aws_cloudfront_distribution.website.id}"
