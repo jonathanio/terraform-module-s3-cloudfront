@@ -4,7 +4,7 @@ output "hostname" {
 }
 
 output "s3_bucket_name" {
-  description = "The name of the S3 bucket to upload the website content to."
+  description = "The name of the S3 content bucket to upload the website content to."
   value       = "${aws_s3_bucket.content.id}"
 }
 
