@@ -57,3 +57,8 @@ variable "tags" {
   description = "A map of tags (in addition to Name) to add to all resources."
   default     = {}
 }
+
+variable "force_destroy" {
+  description = "force destroy bucket even bucket its not empty"
+  default     = "false"
+}
