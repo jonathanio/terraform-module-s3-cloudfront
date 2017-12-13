@@ -59,6 +59,6 @@ variable "tags" {
 }
 
 variable "force_destroy" {
-  description = "force destroy bucket even bucket its not empty"
+  description = "force destroy bucket even bucket is not empty"
   default     = "false"
 }
