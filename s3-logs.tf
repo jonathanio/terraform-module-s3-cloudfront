@@ -1,6 +1,7 @@
 resource "aws_s3_bucket" "logs" {
-  bucket = "s3-cloudfront-${lower(var.name)}-logs"
-  acl    = "log-delivery-write"
+  bucket        = "s3-cloudfront-${lower(var.name)}-logs"
+  acl           = "log-delivery-write"
+  force_destroy = "${var.force_destroy}"
 
   lifecycle_rule {
     id      = "s3-cloudfront-${lower(var.name)}-logs-transitions"
