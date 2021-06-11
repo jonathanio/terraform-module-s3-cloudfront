@@ -34,7 +34,7 @@ resource "aws_s3_bucket" "content" {
     target_prefix = "${var.hostname}/s3"
   }
 
-  tags = merge(var.tags, map("Name", format("s3-cloudfront-%s-content", var.name)))
+  tags = merge(var.tags, tomap({ "Name" = format("s3-cloudfront-%s-content", var.name) }))
 }
 
 resource "aws_s3_bucket_policy" "content" {

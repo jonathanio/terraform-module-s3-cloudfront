@@ -22,5 +22,5 @@ resource "aws_s3_bucket" "logs" {
     }
   }
 
-  tags = merge(var.tags, map("Name", format("s3-cloudfront-%s-logs", var.name)))
+  tags = merge(var.tags, tomap({ "Name" = format("s3-cloudfront-%s-logs", var.name) }))
 }

@@ -3,7 +3,7 @@ resource "aws_cloudfront_distribution" "website" {
   is_ipv6_enabled = true
   http_version    = "http2"
 
-  aliases = compact(concat(list(var.hostname),var.aliases))
+  aliases = compact(concat(tolist([var.hostname]), var.aliases))
 
   viewer_certificate {
     acm_certificate_arn      = data.aws_acm_certificate.frontend.arn
@@ -62,7 +62,7 @@ resource "aws_cloudfront_distribution" "website" {
     prefix          = "${var.hostname}/cloudfront"
   }
 
-  tags = merge(var.tags, map("Name", format("s3-cloudfront-%s-distribution", var.name)))
+  tags = merge(var.tags, tomap({ "Name" = format("s3-cloudfront-%s-distribution", var.name) }))
 }
 
 resource "aws_cloudfront_origin_access_identity" "website" {
