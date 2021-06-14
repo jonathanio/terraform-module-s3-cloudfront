@@ -1,15 +1,15 @@
 resource "aws_s3_bucket" "content" {
   bucket        = "s3-cloudfront-${lower(var.name)}-content"
   acl           = "public-read"
-  force_destroy = "${var.force_destroy}"
+  force_destroy = var.force_destroy
 
   versioning {
     enabled = true
   }
 
   website {
-    index_document = "${var.index_document}"
-    error_document = "${var.error_document}"
+    index_document = var.index_document
+    error_document = var.error_document
   }
 
   cors_rule {
@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "content" {
     allowed_methods = ["GET", "HEAD"]
     allowed_origins = ["https://${var.hostname}"]
     expose_headers  = ["ETag"]
-    max_age_seconds = "${var.cache_ttl}"
+    max_age_seconds = var.cache_ttl
   }
 
   lifecycle_rule {
@@ -30,16 +30,16 @@ resource "aws_s3_bucket" "content" {
   }
 
   logging {
-    target_bucket = "${aws_s3_bucket.logs.id}"
+    target_bucket = aws_s3_bucket.logs.id
     target_prefix = "${var.hostname}/s3"
   }
 
-  tags = "${merge(var.tags, map("Name", format("s3-cloudfront-%s-content", var.name)))}"
+  tags = merge(var.tags, tomap({ "Name" = format("s3-cloudfront-%s-content", var.name) }))
 }
 
 resource "aws_s3_bucket_policy" "content" {
-  bucket = "${aws_s3_bucket.content.id}"
-  policy = "${data.aws_iam_policy_document.s3_bucket_content.json}"
+  bucket = aws_s3_bucket.content.id
+  policy = data.aws_iam_policy_document.s3_bucket_content.json
 }
 
 data "aws_iam_policy_document" "s3_bucket_content" {
@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "s3_bucket_content" {
 
     principals {
       type        = "AWS"
-      identifiers = ["${aws_cloudfront_origin_access_identity.website.iam_arn}"]
+      identifiers = [aws_cloudfront_origin_access_identity.website.iam_arn]
     }
   }
 
@@ -61,11 +61,11 @@ data "aws_iam_policy_document" "s3_bucket_content" {
     effect = "Allow"
 
     actions   = ["s3:ListBucket"]
-    resources = ["${aws_s3_bucket.content.arn}"]
+    resources = [aws_s3_bucket.content.arn]
 
     principals {
       type        = "AWS"
-      identifiers = ["${aws_cloudfront_origin_access_identity.website.iam_arn}"]
+      identifiers = [aws_cloudfront_origin_access_identity.website.iam_arn]
     }
   }
 }
